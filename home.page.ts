@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+
+
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -7,7 +10,16 @@ import { Component } from '@angular/core';
 })
 
 
+
+
+
+
+
+
 export class HomePage {
+
+
+
 
   resultado: string = "0";
   primeiro_elemento: string = "";
@@ -17,15 +29,32 @@ export class HomePage {
   i: string = "0";
 
 
+
+
+
+
+
+
   constructor() {}
 
-  digito(valor: string) {
 
-    if (this.operador_selecionado == false) {
+
+
+  digito(valor: string) {
+    if(this.resultado == "Indefinido")
+    {
+      this.operador_selecionado=false;
+      this.resultado = valor;
+    }
+    else if (this.operador_selecionado == false) {
       if (this.resultado == "0") {
         if (valor != "."){
-        this.resultado = valor;
-      }
+          this.resultado = valor;
+        } else {
+          this.resultado += valor;
+          this.i = "1";
+        }
+       
       } else {
         if (valor == "."){
           if(this.i != "1"){
@@ -42,6 +71,9 @@ export class HomePage {
     }
   }
 
+
+
+
   operador(operador_calculadora: string) {
     if (this.operador_selecionado == false) {
       this.primeiro_elemento = this.resultado;
@@ -50,32 +82,41 @@ export class HomePage {
       this.operando = operador_calculadora;
     } else {
       this.calcular();
-      this.primeiro_elemento = this.resultado;
-      this.resultado = this.primeiro_elemento + operador_calculadora;
-      this.operador_selecionado = true;
-      this.operando = operador_calculadora;
-      if(parseFloat(this.resultado) >= 0){
+        this.primeiro_elemento = this.resultado;
+        this.resultado = this.primeiro_elemento + operador_calculadora;
+        this.operando = operador_calculadora;
+      if (parseFloat(this.resultado) > 0) {
         this.segundo_elemento = this.resultado.substring(parseFloat(this.primeiro_elemento),this.resultado.length);
       }
-        else {
+      else {
         this.segundo_elemento = this.resultado.substring(parseFloat(this.primeiro_elemento),-(this.resultado.length));
       }
     }
   }
 
+
+
+
   calcular() {
     if (this.operando == "+") {
-      this.resultado = (parseFloat(this.primeiro_elemento) + parseFloat(this.segundo_elemento)).toString(); 
+      this.resultado = (parseFloat(this.primeiro_elemento) + parseFloat(this.segundo_elemento)).toString()
     } else if (this.operando == "-") {
       this.resultado = (parseFloat(this.primeiro_elemento) - parseFloat(this.segundo_elemento)).toString();
-    } else if (this.operando == "÷") {
+    } else if (this.operando == "÷") {  
+      if (this.segundo_elemento=="0") {
+        this.resultado = "Indefinido";
+      }else{
       this.resultado = (parseFloat(this.primeiro_elemento) / parseFloat(this.segundo_elemento)).toString();
+      }
     } else if (this.operando == "×") {
       this.resultado = (parseFloat(this.primeiro_elemento) * parseFloat(this.segundo_elemento)).toString();
     } else if (this.operando == '^') {
       this.resultado = (parseFloat(this.primeiro_elemento) ** parseFloat(this.segundo_elemento)).toString();
     }
   }
+
+
+
 
   redefinir() {
     this.resultado = "0";
@@ -86,13 +127,34 @@ export class HomePage {
     this.i = "0";
   }
 
+
+
+
   porcentagem() {
+    if (this.operador_selecionado == true){
+      this.resultado = "Não é possível"        
+    }else{
     this.resultado = (parseFloat(this.resultado) / 100).toString();
+    }
 }
 
+
+
+
+
+
+
+
 radiciacao() {
-  this.resultado = (parseFloat(this.resultado) **(1/2)).toString();
+  if (this.operador_selecionado == true){
+    this.resultado = "Não é possível"        
+  }else{
+    this.resultado = (parseFloat(this.resultado) **(1/2)).toString();
+  }
 }
+
+
+
 
 apagar() {
   if ((this.resultado.length > 0) && (this.resultado != "0")){
@@ -103,8 +165,12 @@ if (this.resultado != "."){
 if (this.resultado != this.operando){
   this.operador_selecionado = false;
 }
+if (this.resultado == ""){
+  this.resultado = "0";
+}
     }
-  } 
+  }
+}
 }
 
 
